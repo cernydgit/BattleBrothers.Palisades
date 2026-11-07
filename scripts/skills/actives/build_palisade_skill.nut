@@ -37,11 +37,22 @@ this.build_palisade_skill <- this.inherit("scripts/skills/skill", {
 		this.m.IsAttack = false;
 		this.m.IsIgnoredAsAOO = true;
 		this.m.IsUsingHitchance = false;
-		this.m.ActionPointCost = 4;
-		this.m.FatigueCost = 10;
 		this.m.MinRange = 1;
 		this.m.MaxRange = 1;
 		this.m.MaxLevelDifference = 1;
+		this.applyCostSettings();
+	}
+
+	// Base costs come from the mod settings (MSU), so changes apply without restarting
+	function applyCostSettings()
+	{
+		this.m.ActionPointCost = ::ModPalisade.getCost("ActionPointCost");
+		this.m.FatigueCost = ::ModPalisade.getCost("FatigueCost");
+	}
+
+	function onAfterUpdate( _properties )
+	{
+		this.applyCostSettings();
 	}
 
 	function getTooltip()

@@ -2,7 +2,7 @@
 
 Adds the active skill **Build Palisade** to every player character.
 
-- Costs **4 AP** and **10 Fatigue**.
+- Costs **4 AP** and **10 Fatigue** by default; both are adjustable in the mod settings (see below).
 - Targets an adjacent empty tile (height difference at most 1).
 - Raises a wooden palisade there. Nobody can pass it, friend or foe. It stays until the battle ends.
 - The palisade is the vanilla bandit camp wall (`entity/tactical/objects/human_camp_wall`, `camp_18_*` sprites). The sprite is chosen so the wall runs across the builder's facing direction.
@@ -12,7 +12,18 @@ Adds the active skill **Build Palisade** to every player character.
 
 - Battle Brothers (vanilla, all DLCs optional)
 - [Modern Hooks](https://www.nexusmods.com/battlebrothers/mods/685)
-- [MSU](https://www.nexusmods.com/battlebrothers/mods/479) is optional; if present, this mod loads after it.
+- [MSU](https://www.nexusmods.com/battlebrothers/mods/479) is optional. With MSU the costs can be changed in the mod settings; without it the defaults are used.
+
+## Mod settings (MSU)
+
+Open **Mod Settings → Palisade → General**:
+
+| Setting | Range | Default |
+| --- | --- | --- |
+| Action Points | 1–10 | 4 |
+| Fatigue | 1–50 | 10 |
+
+The values are saved in your profile and apply to the skill right away, including existing savegames.
 
 ## Compatibility
 
@@ -32,6 +43,6 @@ Compress-Archive -Path scripts, gfx -DestinationPath "..\..\..\data\mod_palisade
 
 | Path | Purpose |
 | --- | --- |
-| `scripts/!mods_preload/mod_palisade.nut` | Registers the mod with Modern Hooks and adds the skill to player characters |
+| `scripts/!mods_preload/mod_palisade.nut` | Registers the mod with Modern Hooks, adds the MSU settings and adds the skill to player characters |
 | `scripts/skills/actives/build_palisade_skill.nut` | The Build Palisade skill |
 | `gfx/skills/mod_palisade_build.png`, `mod_palisade_build_sw.png` | Skill icon (normal and disabled) |
