@@ -153,22 +153,22 @@ this.build_palisade_skill <- this.inherit("scripts/skills/skill", {
 	}
 
 	// The Palisade item is used up. It is kept aside and given back after the battle.
+	// Takes the item from the off hand slot itself: getItem() is only a weak
+	// reference, and item_container.unequip() does not recognise it.
 	function consumeItem( _user )
 	{
-		local item = this.getItem();
+		local items = _user.getItems();
+		local item = items.getItemAtSlot(this.Const.ItemSlot.Offhand);
 
-		if (item != null && typeof item != "instance")
-		{
-			item = item.isNull() ? null : item.get();
-		}
-
-		if (item == null)
+		if (item == null || item.getID() != ::ModPalisade.ItemID)
 		{
 			return;
 		}
 
-		_user.getItems().unequip(item);
-		::ModPalisade.keepUsedItem(item, _user);
+		if (items.unequip(item))
+		{
+			::ModPalisade.keepUsedItem(item, _user);
+		}
 	}
 
 	function onUse( _user, _targetTile )

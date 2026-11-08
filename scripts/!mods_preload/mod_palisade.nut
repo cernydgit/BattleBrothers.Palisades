@@ -1,7 +1,7 @@
 ::ModPalisade <- {
 	ID = "mod_palisade",
 	Name = "Palisade",
-	Version = "2.0.0",
+	Version = "2.0.1",
 	SkillID = "actives.build_palisade",
 	SkillScript = "scripts/skills/actives/build_palisade_skill",
 	ItemID = "shield.mod_palisade",
