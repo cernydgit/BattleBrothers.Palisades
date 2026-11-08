@@ -19,7 +19,7 @@ this.build_palisade_skill <- this.inherit("scripts/skills/skill", {
 	{
 		this.m.ID = "actives.build_palisade";
 		this.m.Name = "Build Palisade";
-		this.m.Description = "Quickly drive sharpened stakes into the ground to raise a wooden palisade on an adjacent empty tile. The palisade cannot be passed by anyone, friend or foe, and lasts until the end of the battle.";
+		this.m.Description = "Drive the Palisade you are holding into the ground to raise a wooden palisade on an adjacent empty tile. The palisade cannot be passed by anyone, friend or foe, and lasts until the end of the battle. The Palisade item is used up, but returns to the stash after the battle.";
 		this.m.Icon = "skills/mod_palisade_build.png";
 		this.m.IconDisabled = "skills/mod_palisade_build_sw.png";
 		this.m.Overlay = "";
@@ -48,8 +48,8 @@ this.build_palisade_skill <- this.inherit("scripts/skills/skill", {
 	// Base costs come from the mod settings (MSU), so changes apply without restarting
 	function applyCostSettings()
 	{
-		this.m.ActionPointCost = ::ModPalisade.getCost("ActionPointCost");
-		this.m.FatigueCost = ::ModPalisade.getCost("FatigueCost");
+		this.m.ActionPointCost = ::ModPalisade.getSetting("ActionPointCost");
+		this.m.FatigueCost = ::ModPalisade.getSetting("FatigueCost");
 	}
 
 	function onAfterUpdate( _properties )
@@ -152,6 +152,25 @@ this.build_palisade_skill <- this.inherit("scripts/skills/skill", {
 		this.Tactical.setBlockedTileHighlightsVisibility(this.Settings.getTempGameplaySettings().HighlightBlockedTiles);
 	}
 
+	// The Palisade item is used up. It is kept aside and given back after the battle.
+	function consumeItem( _user )
+	{
+		local item = this.getItem();
+
+		if (item != null && typeof item != "instance")
+		{
+			item = item.isNull() ? null : item.get();
+		}
+
+		if (item == null)
+		{
+			return;
+		}
+
+		_user.getItems().unequip(item);
+		::ModPalisade.keepUsedItem(item, _user);
+	}
+
 	function onUse( _user, _targetTile )
 	{
 		local myTile = _user.getTile();
@@ -170,6 +189,7 @@ this.build_palisade_skill <- this.inherit("scripts/skills/skill", {
 		}
 
 		this.refreshBlockedTileHighlights();
+		this.consumeItem(_user);
 
 		if (_targetTile.IsVisibleForPlayer)
 		{
