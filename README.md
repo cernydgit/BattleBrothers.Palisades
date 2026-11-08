@@ -7,6 +7,8 @@ Adds the **Palisade** item: a bundle of sharpened stakes that is carried with bo
 - Sold by **marketplaces** and **armorers**. Base price 200 crowns by default.
 - Goes into the off hand slot and also takes up the main hand slot (two-handed). It can be put into a bag.
 - While held it works as a shield: **+25 Melee Defense** and **+50 Ranged Defense** by default, with 100 durability. It lowers Maximum Fatigue by 50 by default.
+- The bearer is shown holding the palisade at shield height. It uses the vanilla bandit camp palisade image in a brush of its own (`mod_palisade_held`), drawn lower and scaled down, on a sprite layer of its own.
+- On the inventory screen it fills the left hand slot and shows faded in the right hand slot, like two-handed weapons do the other way round.
 - Holding it with both hands means no attacks, not even with bare fists.
 - The inventory screen clears both hands when you equip it, and takes it off when you put a weapon into the main hand.
 
@@ -49,15 +51,17 @@ The values are saved in your profile and apply right away, including Palisades y
   - `world_state.onCombatFinished` gives back the Palisades used in battle.
   - `hand_to_hand.isUsable` / `isHidden` disable fists while a Palisade is held.
   - `character_screen.helper_queryEquipmentTargetItems` handles an off hand item that blocks the main hand.
+  - `player.onInit` adds the sprite layer for a held Palisade.
+  - `data_helper.convertItemToUIData` marks the item as blocking the main hand, and `ui/mods/mod_palisade/paperdoll.js` wraps `CharacterScreenPaperdollModule.assignEquipment` to draw it there.
 - The skill is not serialized. Palisade items are saved like any other shield, so removing the mod breaks savegames that contain them.
 
 ## Installation
 
-Zip the contents of this folder (the `scripts` and `gfx` directories at the zip root) as
+Zip the contents of this folder (the `scripts`, `gfx`, `ui` and `brushes` directories at the zip root) as
 `mod_palisade.zip` and put it into `Battle Brothers/data`.
 
 ```powershell
-Compress-Archive -Path scripts, gfx -DestinationPath "..\..\..\data\mod_palisade.zip" -Force
+Compress-Archive -Path scripts, gfx, ui, brushes -DestinationPath "..\..\..\data\mod_palisade.zip" -Force
 ```
 
 ## Files
@@ -69,3 +73,6 @@ Compress-Archive -Path scripts, gfx -DestinationPath "..\..\..\data\mod_palisade
 | `scripts/skills/actives/build_palisade_skill.nut` | The Build Palisade skill |
 | `gfx/skills/mod_palisade_build.png`, `mod_palisade_build_sw.png` | Skill icon (normal and disabled) |
 | `gfx/ui/items/shields/mod_palisade_icon.png`, `mod_palisade_inventory.png` | Item icons (slot and tooltip) |
+| `ui/mods/mod_palisade/paperdoll.js` | Shows the Palisade in the right hand slot of the inventory screen |
+| `brushes/mod_palisade.brush`, `gfx/mod_palisade.png` | Brush `mod_palisade_held`: the held palisade on the character |
+| `tools/make_brush.py` | Builds the brush and its atlas from the vanilla `object_1` brush and atlas (not part of the zip) |

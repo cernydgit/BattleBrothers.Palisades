@@ -1,7 +1,16 @@
 // A bundle of sharpened stakes, carried with both hands like a large shield.
 // While held it grants the Build Palisade skill.
 this.mod_palisade_shield <- this.inherit("scripts/items/shields/shield", {
-	m = {},
+	m = {
+		// The bearer shows the palisade on a sprite layer of its own (see the
+		// player hook). The brush is the vanilla camp_18_03 image, drawn lower
+		// (brushes/mod_palisade.brush), because portraits ignore sprite offsets.
+		HeldBrush = "mod_palisade_held",
+		HeldSpriteScale = 0.6,
+		// Sprite offsets only apply on the battlefield (portraits ignore them).
+		// The brush is placed for portraits; this lifts it back up in battle.
+		HeldSpriteBattleOffsetY = 28
+	},
 	function create()
 	{
 		this.shield.create();
@@ -9,7 +18,7 @@ this.mod_palisade_shield <- this.inherit("scripts/items/shields/shield", {
 		this.m.Name = "Palisade";
 		this.m.Description = "A bundle of sharpened wooden stakes, lashed together and carried with both hands. Held up, it covers its bearer like a large shield. Driven into the ground, it raises a palisade that nobody can pass.";
 		this.m.AddGenericSkill = true;
-		// No character sprite exists for this item, so it is not drawn on the bearer
+		// Drawn by updateHeldSprite() instead of the shield layer
 		this.m.ShowOnCharacter = false;
 		this.m.ShieldDecal = "";
 		this.m.Icon = "shields/mod_palisade_icon.png";
@@ -70,6 +79,50 @@ this.mod_palisade_shield <- this.inherit("scripts/items/shields/shield", {
 		this.applySettings();
 		this.shield.onEquip();
 		this.addSkill(::new(::ModPalisade.SkillScript));
+	}
+
+	function updateHeldSprite( _isHeld )
+	{
+		if (this.getContainer() == null)
+		{
+			return;
+		}
+
+		local actor = this.getContainer().getActor();
+
+		if (actor == null || actor.isNull() || !actor.hasSprite(::ModPalisade.HeldSprite))
+		{
+			return;
+		}
+
+		local sprite = actor.getSprite(::ModPalisade.HeldSprite);
+
+		if (_isHeld)
+		{
+			sprite.setBrush(this.m.HeldBrush);
+			sprite.Scale = this.m.HeldSpriteScale;
+			sprite.Visible = true;
+			actor.setSpriteOffset(::ModPalisade.HeldSprite, this.createVec(0, this.m.HeldSpriteBattleOffsetY));
+		}
+		else
+		{
+			sprite.Visible = false;
+			sprite.setBrush("");
+		}
+
+		actor.setDirty(true);
+	}
+
+	function updateAppearance()
+	{
+		this.shield.updateAppearance();
+		this.updateHeldSprite(this.isEquipped());
+	}
+
+	function onUnequip()
+	{
+		this.shield.onUnequip();
+		this.updateHeldSprite(false);
 	}
 
 	function onUpdateProperties( _properties )

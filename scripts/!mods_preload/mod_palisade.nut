@@ -1,8 +1,10 @@
 ::ModPalisade <- {
 	ID = "mod_palisade",
 	Name = "Palisade",
-	Version = "2.0.1",
+	Version = "2.3.3",
 	SkillID = "actives.build_palisade",
+	// Sprite layer that shows a held Palisade on the bearer
+	HeldSprite = "mod_palisade_held",
 	SkillScript = "scripts/skills/actives/build_palisade_skill",
 	ItemID = "shield.mod_palisade",
 	// Shop entry path, relative to scripts/items/
@@ -136,6 +138,39 @@
 			}
 		}
 	});
+
+	// A sprite layer on top of the others, used to draw a held Palisade
+	::ModPalisade.Mod.hook("scripts/entity/tactical/player", function( q )
+	{
+		q.onInit = @(__original) function()
+		{
+			__original();
+
+			if (!this.hasSprite(::ModPalisade.HeldSprite))
+			{
+				this.addSprite(::ModPalisade.HeldSprite).Visible = false;
+			}
+		}
+	});
+
+	// Tell the inventory screen that the item also takes up the main hand
+	::ModPalisade.Mod.hook("scripts/ui/global/data_helper", function( q )
+	{
+		q.convertItemToUIData = @(__original) function( _item, _forceSmallIcon, _owner = null )
+		{
+			local result = __original(_item, _forceSmallIcon, _owner);
+
+			if (result != null && _item.getBlockedSlotType() == ::Const.ItemSlot.Mainhand)
+			{
+				result.isBlockingMainhand <- true;
+			}
+
+			return result;
+		}
+	});
+
+	// Draws the Palisade in the main hand slot too, see the file
+	::Hooks.registerJS("ui/mods/mod_palisade/paperdoll.js");
 
 	// Give back the Palisades used up in battle
 	::ModPalisade.Mod.hook("scripts/states/world_state", function( q )
