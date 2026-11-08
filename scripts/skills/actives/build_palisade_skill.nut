@@ -2,15 +2,17 @@ this.build_palisade_skill <- this.inherit("scripts/skills/skill", {
 	m = {
 		// Vanilla bandit camp palisade object (Battle Brothers' human_camp_wall)
 		ObjectScript = "entity/tactical/objects/human_camp_wall",
-		// Brushes from the vanilla bandit camp palisade, picked so the wall
-		// runs across the direction the builder is facing.
+		// Brushes from the vanilla bandit camp palisade, picked so the wall runs
+		// along the builder's hex edge: palisades built all around the builder
+		// form a hexagon. 03/05 are straight rows, 01/04 slope down to the
+		// right ("\") and 02/08 slope up to the right ("/").
 		BrushesByDirection = [
-			[ "camp_18_03" ],               // N
-			[ "camp_18_01", "camp_18_04" ], // NE
-			[ "camp_18_02", "camp_18_08" ], // SE
-			[ "camp_18_05" ],               // S
-			[ "camp_18_01", "camp_18_04" ], // SW
-			[ "camp_18_02", "camp_18_08" ]  // NW
+			[ "camp_18_03", "camp_18_05" ], // N  "-"
+			[ "camp_18_02", "camp_18_08" ], // NE
+			[ "camp_18_01", "camp_18_04" ], // SE
+			[ "camp_18_03", "camp_18_05" ], // S  "-"
+			[ "camp_18_02", "camp_18_08" ], // SW
+			[ "camp_18_01", "camp_18_04" ]  // NW
 		]
 	},
 	function create()

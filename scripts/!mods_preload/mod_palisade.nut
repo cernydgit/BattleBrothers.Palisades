@@ -1,7 +1,7 @@
 ::ModPalisade <- {
 	ID = "mod_palisade",
 	Name = "Palisade",
-	Version = "1.1.0",
+	Version = "1.1.1",
 	SkillID = "actives.build_palisade",
 	SkillScript = "scripts/skills/actives/build_palisade_skill",
 	// Used when MSU is not installed, and as the defaults of the mod settings

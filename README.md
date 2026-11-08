@@ -5,7 +5,7 @@ Adds the active skill **Build Palisade** to every player character.
 - Costs **4 AP** and **10 Fatigue** by default; both are adjustable in the mod settings (see below).
 - Targets an adjacent empty tile (height difference at most 1).
 - Raises a wooden palisade there. Nobody can pass it, friend or foe. It stays until the battle ends.
-- The palisade is the vanilla bandit camp wall (`entity/tactical/objects/human_camp_wall`, `camp_18_*` sprites). The sprite is chosen so the wall runs across the builder's facing direction.
+- The palisade is the vanilla bandit camp wall (`entity/tactical/objects/human_camp_wall`, `camp_18_*` sprites). The sprite follows the edge of the builder's hex, so palisades built all around a character form a hexagon.
 - Built palisades also show up with the "highlight blocked tiles" toggle.
 
 ## Requirements
